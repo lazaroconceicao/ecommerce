@@ -44,7 +44,7 @@ $app->post('/admin/login', function() {
 
 	User::login($_POST["login"], $_POST["password"]);
 
-	header("Location /admin");
+	header("Location: /admin");
 	exit;
 });
 
@@ -52,7 +52,7 @@ $app->get('/admin/logout', function() {
 
 	User::logout()	;
 
-	header("Location /admin/login");
+	header("Location: /admin/login");
 	exit;
 });
 

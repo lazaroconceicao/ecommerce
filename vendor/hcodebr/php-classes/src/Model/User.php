@@ -18,8 +18,8 @@ class User extends Model {
 
 		));
 
-		if(count($results) == 0) {
-			throw new \Exception("Usuário inexistente ou senha inválida.");			
+		if(count($results) === 0) {
+			throw new \Exception("Usuário inexistente ou senha inválida.");
 		}
 
 		$data = $results[0];
@@ -49,7 +49,7 @@ class User extends Model {
 			||
 			!(int)$_SESSION[User::SESSION]["iduser"] > 0
 			||
-			(bool)$_SESSION[User::SESSION["inadmin"]] !== $inadmin
+			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin
 		) {
 
 			header("Location: /admin/login");
