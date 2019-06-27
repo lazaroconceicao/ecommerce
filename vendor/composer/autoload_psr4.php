@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Hcode\\' => array($vendorDir . '/hcodebr/php-classes/src'),
+    'App\\' => array($vendorDir . '/hcodebr/php-classes/src/Model')
 );
