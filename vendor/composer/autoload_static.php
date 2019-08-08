@@ -6,18 +6,8 @@ namespace Composer\Autoload;
 
 class ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978
 {
-    public static $prefixLengthsPsr4 = array (
-        'H' => 
-        array (
-            'Hcode\\' => 6,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'Hcode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/hcodebr/php-classes/src',
-        ),
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/../..' . '/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -51,8 +41,7 @@ class ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978::$prefixesPsr0;
             $loader->classMap = ComposerStaticInite43f0404ba1e1bc5b30bbb4f90523978::$classMap;
 
