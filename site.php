@@ -7,6 +7,8 @@ use \Hcode\Model\Cart;
 
 $app->get('/', function() {
 
+	//$products = new Product();
+
 	$products = Product::listAll();
 
 	$page = new Page();
@@ -14,7 +16,6 @@ $app->get('/', function() {
 	$page->setTpl("index", [
 		"products"=>Product::checkList($products)
 	]);	
-
 });
 
 $app->get("/categories/:idcategory", function($idcategory) {
