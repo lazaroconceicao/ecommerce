@@ -194,7 +194,7 @@ class User extends Model {
 
 		if (count($results) === 0) {
 
-			throw new \Exception("Não foi possível recuperar a senha.");
+			throw new \Exception("Não foi possível recuperar a senha");
 		
 		} else {
 			$data = $results[0];
@@ -206,24 +206,29 @@ class User extends Model {
 
 			if (count($results2) === 0)
 			{
-				throw new \Exception("Não foi possível recuperar a senha.");
+				throw new \Exception("Não foi possível recuperar a senha");
 
 			}
 			else
 			{
+				
 				$dataRecovery = $results2[0];
+
 				$iv = random_bytes(openssl_cipher_iv_length('aes-256-cbc'));
 				$code = openssl_encrypt($dataRecovery['idrecovery'], 'aes-256-cbc', User::SECRET, 0, $iv);
 				$result = base64_encode($iv.$code);
-				if ($inadmin === true) {
-					$link = "http://www.monteiro.com.br/admin/forgot/reset?code=$result";
 
-				} else {
-					$link = "http://www.monteiro.com.br/forgot/reset?code=$result";
+				if ($inadmin === true) {
+					$link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$result";
 
 				} 
 
-				$mailer = new Mailer($data['desemail'], $data['desperson'], "Redefinir sua senha no app Monteiro Store", "forgot", array(
+				else {
+					$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$result";
+
+				} 
+
+				$mailer = new Mailer($data['desemail'], $data['desperson'], "Redefinir Senha da Hcode Store", "forgot", array(
 					"name"=>$data['desperson'],
 					"link"=>$link
 				)); 
@@ -238,33 +243,36 @@ class User extends Model {
 
 	public static function validForgotDecrypt($result)
 	{
-		$result = base64_decode($result);
-		$code = mb_substr($result, openssl_cipher_iv_length('aes-256-cbc'), null, '8bit');
-		$iv = mb_substr($result, 0, openssl_cipher_iv_length('aes-256-cbc'), '8bit');;
-		$idrecovery = openssl_decrypt($code, 'aes-256-cbc', User::SECRET, 0, $iv);
-		$sql = new Sql();
-		$results = $sql->select("
-			SELECT *
-			FROM tb_userspasswordsrecoveries a
-			INNER JOIN tb_users b USING(iduser)
-			INNER JOIN tb_persons c USING(idperson)
-			WHERE
-			a.idrecovery = :idrecovery
-			AND
-			a.dtrecovery IS NULL
-			AND
-			DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
-			", array(
-				":idrecovery"=>$idrecovery
-			));
-		if (count($results) === 0)
-		{
-			throw new \Exception("Não foi possível recuperar a senha.");
-		}
-		else
-		{
-			return $results[0];
-		}
+			$result = base64_decode($result);
+
+			$code = mb_substr($result, openssl_cipher_iv_length('aes-256-cbc'), null, '8bit');
+			$iv = mb_substr($result, 0, openssl_cipher_iv_length('aes-256-cbc'), '8bit');;
+			$idrecovery = openssl_decrypt($code, 'aes-256-cbc', User::SECRET, 0, $iv);
+
+			$sql = new Sql();
+
+			$results = $sql->select("
+				SELECT *
+				FROM tb_userspasswordsrecoveries a
+				INNER JOIN tb_users b USING(iduser)
+				INNER JOIN tb_persons c USING(idperson)
+				WHERE
+				a.idrecovery = :idrecovery
+				AND
+				a.dtrecovery IS NULL
+				AND
+				DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
+				", array(
+					":idrecovery"=>$idrecovery
+				));
+			if (count($results) === 0)
+			{
+				throw new \Exception("Não foi possível recuperar a senha.");
+			}
+			else
+			{
+				return $results[0];
+			}
 	}
 
 
@@ -334,43 +342,39 @@ class User extends Model {
 		$_SESSION[User::SUCCESS] = NULL;
 	}
 
-	public static function setErrorRegister($msg)
-	{
+	public static function setErrorRegister($msg){
 
 		$_SESSION[User::ERROR_REGISTER] = $msg;
 	}
 
-	public static function getErrorRegister()
-	{
+	public static function getErrorRegister(){
 
 		$msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
 		
-		User::clearErrorRegister();
+		User::clearError();
 
 		return $msg;
 	}
 
-	public static function clearErrorRegister()
-	{
-		$_SESSION[User::ERROR_REGISTER] = NULL;
+	public static function clearErrorRegister(){
 
+		$_SESSION[User::ERROR_REGISTER] = NULL;
 	}
 
-	public static function checkLoginExist($login)
-	{
+	public static function checkLoginExist($login){
 
 		$sql = new Sql();
 
 		$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
+
 			':deslogin'=>$login
 		]);
 
 		return (count($results) > 0);
-
 	}
 
-	public static function getPasswordHash($password)	{
-
+	public static function getPasswordHash($password){
+		
 		return password_hash($password, PASSWORD_DEFAULT, [
 			'cost'=>12
 		]);

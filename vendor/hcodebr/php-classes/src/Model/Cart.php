@@ -185,7 +185,6 @@ class Cart extends Model {
 			if (count($results) > 0) {
 				return $results[0];
 			} else {
-
 				return [];
 			}
 	}
