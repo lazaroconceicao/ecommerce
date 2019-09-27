@@ -134,7 +134,6 @@ class Category extends Model {
 	}
 
 
-
 	public function addProduct(Product $product)
 	{
 
