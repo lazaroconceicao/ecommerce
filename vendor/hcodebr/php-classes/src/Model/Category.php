@@ -211,9 +211,6 @@ class Category extends Model {
 
 	}
 
-
-	
-
 }
 
 ?>
